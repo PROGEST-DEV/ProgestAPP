@@ -12,6 +12,7 @@ export default function New() {
 		<Form
 		title='Nueva Orden de Cambio'
         button='Crear Orden de Cambio'
+		back=''
 		fields={null}
 		onSubmit={null}/>
 	);

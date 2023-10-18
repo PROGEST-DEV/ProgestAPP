@@ -6,6 +6,7 @@ interface ProjectItem {
     requestDate: string;
     type: string;
     status: string;
+    squareMeters: number;
     budget: number;
 }
  

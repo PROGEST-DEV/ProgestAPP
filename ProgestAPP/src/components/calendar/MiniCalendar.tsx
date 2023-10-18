@@ -10,7 +10,10 @@ import Card from 'components/card/Card';
 
 export default function MiniCalendar(props: { selectRange: boolean; [x: string]: any }) {
 	const { selectRange, ...rest } = props;
-	const [ value, onChange ] = useState(new Date());
+	const [date, setDate] = useState([
+		new Date(new Date().getFullYear(), 0, 1),
+		new Date(new Date().getFullYear(), 11, 31),
+	]);
 	return (
 		<Card
 			alignItems='center'
@@ -21,10 +24,9 @@ export default function MiniCalendar(props: { selectRange: boolean; [x: string]:
 			h='max-content'
 			{...rest}>
 			<Calendar
-				onChange={onChange}
-				value={value}
+				onChange={setDate}
+				defaultValue={date}
 				selectRange={selectRange}
-				view={'month'}
 				tileContent={<Text color='brand.500' />}
 				prevLabel={<Icon as={MdChevronLeft} w='24px' h='24px' mt='4px' />}
 				nextLabel={<Icon as={MdChevronRight} w='24px' h='24px' mt='4px' />}

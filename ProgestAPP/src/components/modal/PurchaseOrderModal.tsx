@@ -4,20 +4,25 @@ import ComplexTable from 'components/table/ComplexTable';
 import AddButton from 'components/button/AddButton';
 import PurchaseOrderService from 'services/PurchaseOrderService';
 import PurchaseOrderItem from 'interfaces/PurchaseOrderItem';
-
+import Cookies from 'js-cookie';
 
 function PurchaseOrderModal(props:{title: string, id: string, isOpen: boolean, onClose: () => void}) {
     const { title, id, isOpen, onClose } = props;
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const textColor = useColorModeValue('secondaryGray.900', 'white');
-
+    const spinnerColor = useColorModeValue('brand.700', 'white');
 
     useEffect(() => {
         if (isOpen) {
             setIsLoading(true);
-            PurchaseOrderService.getAll()
+            Cookies.set('projectid', id);
+            PurchaseOrderService.getAll(['projectid'], id)
                 .then((purchaseOrderData:  PurchaseOrderItem[]) => {
+                    purchaseOrderData = purchaseOrderData.map(order => ({
+                        ...order,
+                        date: order.date.split('T')[0] || ''
+                    }));
                     setPurchaseOrders(purchaseOrderData);
                 })
                 .catch(error => {
@@ -27,7 +32,7 @@ function PurchaseOrderModal(props:{title: string, id: string, isOpen: boolean, o
                     setIsLoading(false);
                 });
         }
-    }, [isOpen]);
+    }, [isOpen, id]);
 
     return (
         <>
@@ -37,7 +42,7 @@ function PurchaseOrderModal(props:{title: string, id: string, isOpen: boolean, o
                     <ModalBody>
                         {isLoading ? (
                             <Center>
-                                <Spinner size="xl" />
+                                <Spinner size="xl" variant='darkBrand' color={spinnerColor} />
                             </Center>
                         ) : (
                             <>
@@ -47,7 +52,7 @@ function PurchaseOrderModal(props:{title: string, id: string, isOpen: boolean, o
                                     </Text>
                                     <AddButton redirect={`/purchase-order/new/${id}`}/>
                                 </Flex>
-                                <ComplexTable tableData={purchaseOrders} />
+                                <ComplexTable tableData={purchaseOrders} service={PurchaseOrderService} typeModal='purchaseorder'/>
                             </>
                         )}
                     </ModalBody>

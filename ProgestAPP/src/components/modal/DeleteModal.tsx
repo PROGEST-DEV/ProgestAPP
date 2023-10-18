@@ -8,7 +8,7 @@ import {
     Button, 
 } from '@chakra-ui/react';
 
-function DeleteModal(props:{message:any, handle:() => void, isOpen: boolean, onClose: () => void}) {
+function DeleteModal(props:{message:any, handle:(service: any) => void, isOpen: boolean, onClose: () => void}) {
     const { message, handle, isOpen, onClose } = props;
     return (
         <Modal colorScheme="red" isOpen={isOpen} onClose={onClose}>

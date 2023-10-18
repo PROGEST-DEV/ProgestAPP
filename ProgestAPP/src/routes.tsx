@@ -1,5 +1,5 @@
 import { Icon } from '@chakra-ui/react';
-import { MdHome, MdLock } from 'react-icons/md';
+import { MdHome, MdBarChart, MdLock } from 'react-icons/md';
 
 // Projects Imports
 import Projects from 'views/admin/project';
@@ -9,14 +9,24 @@ import EditProject from 'views/admin/project/edit';
 
 // PurchaseOrder Imports
 import NewPurchaseOrder from 'views/admin/purchaseOrder/new';
+import EditPurchaseOrder from 'views/admin/purchaseOrder/edit';
 
-import NewChangeOrder from 'views/admin/changeOrder/new';
+// Invoice Imports 
 import NewInvoice from 'views/admin/invoice/new';
+
+// Receipt Imports
 import NewReceipt from 'views/admin/receipt/new';
+
+// Expense Imports 
+import Expenses from 'views/admin/expense/index';
 import NewPayRoll from 'views/admin/payRoll/new';
 import NewMaterialRequest from 'views/admin/materialRequest/new';
 import NewReimbursement from 'views/admin/reimbursement/new';
 import NewService from 'views/admin/service/new';
+
+// Dashboard Imports
+import Dashboard from "views/admin/dashboard";
+
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
 import SignUpCentered from 'views/auth/signUp';
@@ -32,7 +42,7 @@ const routes = [
 	{
 		name: 'Detalles del Proyecto',
 		layout: '/project',
-		path: '/details',
+		path: '/details/:id',
 		component: DetailsProject,
 		secondary: true
 	},
@@ -58,53 +68,67 @@ const routes = [
 		secondary: true
 	},
 	{
-		name: 'Nueva Orden de Cambio',
-		layout: '/change-order',
-		path: '/new',
-		component: NewChangeOrder,
+		name: 'Actualizar Orden de Compra',
+		layout: '/purchase-order',
+		path: '/edit/:id',
+		component: EditPurchaseOrder,
 		secondary: true
 	},
 	{
 		name: 'Nueva Factura',
 		layout: '/invoice',
-		path: '/new',
+		path: '/new/:id',
 		component: NewInvoice,
 		secondary: true
 	},
 	{
 		name: 'Nuevo Recibo',
 		layout: '/receipt',
-		path: '/new',
+		path: '/new/:id',
 		component: NewReceipt,
+		secondary: true
+	},
+	{
+		name: 'Gastos',
+		layout: '/expense',
+		path: '/index/:id',
+		component: Expenses,
 		secondary: true
 	},
 	{
 		name: 'Nueva Planilla',
 		layout: '/pay-roll',
-		path: '/new',
+		path: '/new/:id',
 		component: NewPayRoll,
 		secondary: true
 	},
 	{
 		name: 'Nueva Solicitud de Material',
 		layout: '/material-request',
-		path: '/new',
+		path: '/new/:id',
 		component: NewMaterialRequest,
 		secondary: true
 	},
 	{
 		name: 'Nuevo Reembolso',
 		layout: '/reimbursement',
-		path: '/new',
+		path: '/new/:id',
 		component: NewReimbursement,
 		secondary: true
 	},
 	{
 		name: 'Nuevo Servicio',
 		layout: '/service',
-		path: '/new',
+		path: '/new/:id',
 		component: NewService,
 		secondary: true
+	},
+	{
+		name: "Dashboard",
+		layout: "/dashboard",
+		path: "/index",
+		icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
+		component: Dashboard,
 	},
 	{
 		name: 'Salir',

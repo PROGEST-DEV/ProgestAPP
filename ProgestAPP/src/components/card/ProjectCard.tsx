@@ -74,7 +74,7 @@ export default function ProjectCard(props: {
                 >
                     <Link
                         to={{
-                            pathname: '/project/details',
+                            pathname: `/project/details/${id}`,
                             state,
                         }}
                     >

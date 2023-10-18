@@ -1,33 +1,31 @@
 // Daily Traffic Dashboards Default
 
-export const barChartDataDailyTraffic = [
+export const barChartData = (name: string, data: number[]) => [
 	{
-		name: 'Daily Traffic',
-		data: [ 20, 30, 40, 20, 45, 50, 30 ]
+		name: name,
+		data: data
 	}
 ];
 
-export const barChartOptionsDailyTraffic: any = {
+export const barChartOptions = (categories: string[]) => ({
 	chart: {
 		toolbar: {
-			show: false
+			show: true,
 		}
 	},
 	tooltip: {
 		style: {
 			fontSize: '12px',
-			fontFamily: undefined
 		},
 		onDatasetHover: {
 			style: {
 				fontSize: '12px',
-				fontFamily: undefined
 			}
 		},
 		theme: 'dark'
 	},
 	xaxis: {
-		categories: [ '00', '04', '08', '12', '14', '16', '18' ],
+		categories: categories,
 		show: false,
 		labels: {
 			show: true,
@@ -98,10 +96,10 @@ export const barChartOptionsDailyTraffic: any = {
 	plotOptions: {
 		bar: {
 			borderRadius: 10,
-			columnWidth: '40px'
+			columnWidth: '20px'
 		}
 	}
-};
+});
 
 export const barChartDataUserActivity = [
 	{
@@ -306,129 +304,128 @@ export const barChartOptionsConsumption: any = {
 	}
 };
 
-export const pieChartOptions: any = {
-	labels: [ 'Your files', 'System', 'Empty' ],
-	colors: [ '#4318FF', '#6AD2FF', '#EFF4FB' ],
-	chart: {
-		width: '50px'
-	},
-	states: {
-		hover: {
-			filter: {
-				type: 'none'
+export const pieChartOptions: any = (labels: string[]) => {
+	return{
+		labels: labels,
+		colors: [ '#4318FF', '#6AD2FF', '#EFF4FB' ],
+		chart: {
+			width: '50px',
+			toolbar: {
+				show: true
 			}
-		}
-	},
-	legend: {
-		show: false
-	},
-	dataLabels: {
-		enabled: false
-	},
-	hover: { mode: null },
-	plotOptions: {
-		donut: {
-			expandOnClick: false,
-			donut: {
-				labels: {
-					show: false
+		},
+		states: {
+			hover: {
+				filter: {
+					type: 'none'
 				}
 			}
+		},
+		legend: {
+			show: false
+		},
+		dataLabels: {
+			enabled: false
+		},
+		hover: { mode: 'null' },
+		plotOptions: {
+			donut: {
+				expandOnClick: false,
+				donut: {
+					labels: {
+						show: false
+					}
+				}
+			}
+		},
+		fill: {
+			colors: [ '#4318FF', '#6AD2FF', '#EFF4FB' ]
+		},
+		tooltip: {
+			enabled: true,
+			theme: 'dark'
 		}
-	},
-	fill: {
-		colors: [ '#4318FF', '#6AD2FF', '#EFF4FB' ]
-	},
-	tooltip: {
-		enabled: true,
-		theme: 'dark'
 	}
 };
 
-export const pieChartData = [ 63, 25, 12 ];
+export const lineChartData = (data: { name: string; data: number[] }[]) => {
+	return data.map(({ name, data }) => ({
+	  name: name,
+	  data: data,
+	}));
+};
 
-// Total Spent Default
-
-export const lineChartDataTotalSpent = [
-	{
-		name: 'Revenue',
-		data: [ 50, 64, 48, 66, 49, 68 ]
-	},
-	{
-		name: 'Profit',
-		data: [ 30, 40, 24, 46, 20, 46 ]
-	}
-];
-
-export const lineChartOptionsTotalSpent: any = {
-	chart: {
-		toolbar: {
-			show: false
-		},
-		dropShadow: {
-			enabled: true,
-			top: 13,
-			left: 0,
-			blur: 10,
-			opacity: 0.1,
-			color: '#4318FF'
-		}
-	},
-	colors: [ '#4318FF', '#39B8FF' ],
-	markers: {
-		size: 0,
-		colors: 'white',
-		strokeColors: '#7551FF',
-		strokeWidth: 3,
-		strokeOpacity: 0.9,
-		strokeDashArray: 0,
-		fillOpacity: 1,
-		discrete: [],
-		shape: 'circle',
-		radius: 2,
-		offsetX: 0,
-		offsetY: 0,
-		showNullDataPoints: true
-	},
-	tooltip: {
-		theme: 'dark'
-	},
-	dataLabels: {
-		enabled: false
-	},
-	stroke: {
-		curve: 'smooth',
-		type: 'line'
-	},
-	xaxis: {
-		type: 'numeric',
-		categories: [ 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB' ],
-		labels: {
-			style: {
-				colors: '#A3AED0',
-				fontSize: '12px',
-				fontWeight: '500'
+export const lineChartOptions: any = (labels: string[]) => {
+	return {
+		chart: {
+			toolbar: {
+				show: false
+			},
+			dropShadow: {
+				enabled: true,
+				top: 13,
+				left: 0,
+				blur: 10,
+				opacity: 0.1,
+				color: '#4318FF'
 			}
 		},
-		axisBorder: {
+		colors: [ '#4318FF', '#39B8FF', '#FEB2B2' ],
+		markers: {
+			size: 0,
+			colors: 'white',
+			strokeColors: '#7551FF',
+			strokeWidth: 3,
+			strokeOpacity: 0.9,
+			strokeDashArray: 0,
+			fillOpacity: 1,
+			discrete: [] as number[],
+			shape: 'circle',
+			radius: 2,
+			offsetX: 0,
+			offsetY: 0,
+			showNullDataPoints: true
+		},
+		tooltip: {
+			theme: 'dark'
+		},
+		dataLabels: {
+			enabled: false
+		},
+		stroke: {
+			curve: 'smooth',
+			type: 'line'
+		},
+		xaxis: {
+			type: 'numeric',
+			categories: labels,
+			labels: {
+				style: {
+					colors: '#A3AED0',
+					fontSize: '12px',
+					fontWeight: '500'
+				}
+			},
+			axisBorder: {
+				show: false
+			},
+			axisTicks: {
+				show: false
+			}
+		},
+		yaxis: {
 			show: false
 		},
-		axisTicks: {
+		legend: {
 			show: false
-		}
-	},
-	yaxis: {
-		show: false
-	},
-	legend: {
-		show: false
-	},
-	grid: {
-		show: false,
-		column: {
-			color: [ '#7551FF', '#39B8FF' ],
-			opacity: 0.5
-		}
-	},
-	color: [ '#7551FF', '#39B8FF' ]
+		},
+		grid: {
+			show: false,
+			column: {
+				color: [ '#7551FF', '#39B8FF' ],
+				opacity: 0.5
+			}
+		},
+		color: [ '#7551FF', '#39B8FF' ]
+	}
 };

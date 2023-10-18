@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 
 // Chakra imports
 import {
@@ -12,12 +12,21 @@ import {
 	Icon,
 	Text
 } from '@chakra-ui/react';
+
 // Assets
-import { MdOutlinePerson, MdOutlineCardTravel, MdOutlineLightbulb, MdOutlineSettings } from 'react-icons/md';
-export default function Banner(props: { icon: JSX.Element | string; [x: string]: any }) {
-	const { icon, ...rest } = props;
+import {
+	MdDelete
+} from 'react-icons/md';
+
+import DeleteModal from 'components/modal/DeleteModal';
+import OkModal from 'components/modal/OkModal';
+
+export default function Banner(props: { id?: any, name?: string, service: any, icon: JSX.Element | string; [x: string]: any }) {
+	const { id, name, service, icon, ...rest } = props;
 
 	// Ellipsis modals
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [isOkModalOpen, setIsOkModalOpen] = useState(false);
 	const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure();
 
 	// Chakra color mode
@@ -29,6 +38,22 @@ export default function Banner(props: { icon: JSX.Element | string; [x: string]:
 	);
 	const bgList = useColorModeValue('white', 'whiteAlpha.100');
 	const bgShadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
+	
+	const handleDelete = async (service: { delete: (id: any) => Promise<void> }) => {
+		try {
+			await service.delete(id);
+			console.log('Ok');
+			setIsOkModalOpen(true);
+			setIsDeleteModalOpen(false);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
+	const closeOkModalAndReload = () => {
+        setIsOkModalOpen(false);
+        window.location.reload();
+    };
 
 	return (
 		<Menu isOpen={isOpen1} onClose={onClose1}>
@@ -47,26 +72,6 @@ export default function Banner(props: { icon: JSX.Element | string; [x: string]:
 				p='15px'>
 				<MenuItem
 					transition='0.2s linear'
-					color={textColor}
-					_hover={textHover}
-					p='0px'
-					borderRadius='8px'
-					_active={{
-						bg: 'transparent'
-					}}
-					_focus={{
-						bg: 'transparent'
-					}}
-					mb='10px'>
-					<Flex align='center'>
-						<Icon as={MdOutlinePerson} h='16px' w='16px' me='8px' />
-						<Text fontSize='sm' fontWeight='400'>
-							Panel 1
-						</Text>
-					</Flex>
-				</MenuItem>
-				<MenuItem
-					transition='0.2s linear'
 					p='0px'
 					borderRadius='8px'
 					color={textColor}
@@ -77,54 +82,38 @@ export default function Banner(props: { icon: JSX.Element | string; [x: string]:
 					_focus={{
 						bg: 'transparent'
 					}}
-					mb='10px'>
+					mb='10px'
+					onClick={() => setIsDeleteModalOpen(true)}
+					>
 					<Flex align='center'>
-						<Icon as={MdOutlineCardTravel} h='16px' w='16px' me='8px' />
+						<Icon as={MdDelete} h='16px' w='16px' me='8px' />
 						<Text fontSize='sm' fontWeight='400'>
-							Panel 2
-						</Text>
-					</Flex>
-				</MenuItem>
-				<MenuItem
-					transition='0.2s linear'
-					p='0px'
-					borderRadius='8px'
-					color={textColor}
-					_hover={textHover}
-					_active={{
-						bg: 'transparent'
-					}}
-					_focus={{
-						bg: 'transparent'
-					}}
-					mb='10px'>
-					<Flex align='center'>
-						<Icon as={MdOutlineLightbulb} h='16px' w='16px' me='8px' />
-						<Text fontSize='sm' fontWeight='400'>
-							Panel 3
-						</Text>
-					</Flex>
-				</MenuItem>
-				<MenuItem
-					transition='0.2s linear'
-					color={textColor}
-					_hover={textHover}
-					p='0px'
-					borderRadius='8px'
-					_active={{
-						bg: 'transparent'
-					}}
-					_focus={{
-						bg: 'transparent'
-					}}>
-					<Flex align='center'>
-						<Icon as={MdOutlineSettings} h='16px' w='16px' me='8px' />
-						<Text fontSize='sm' fontWeight='400'>
-							Panel 4
+							Eliminar
 						</Text>
 					</Flex>
 				</MenuItem>
 			</MenuList>
+			{isDeleteModalOpen && (
+				<DeleteModal
+					message={
+						<>
+							¿Desea eliminar <strong>{name}</strong>?
+						</>
+					}
+					handle={() => handleDelete(service)}
+					isOpen={isDeleteModalOpen}
+					onClose={() => setIsDeleteModalOpen(false)}
+				/>
+			)}
+			<OkModal
+				message={
+					<>
+						!<strong>{name}</strong> eliminado!
+					</>
+				}
+				isOpen={isOkModalOpen}
+				onClose={closeOkModalAndReload}
+			/>
 		</Menu>
 	);
 }

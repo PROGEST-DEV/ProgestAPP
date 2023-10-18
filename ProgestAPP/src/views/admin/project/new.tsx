@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useHistory } from 'react-router-dom';
 
 import Form from 'components/form/Form';
 import OkModal from 'components/modal/OkModal';
@@ -9,14 +10,16 @@ import FormField from 'interfaces/FormField';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const history = useHistory();
 
 	const fields: FormField[] = [
-		{ label: 'Nombre', name: 'name', type: 'text', value: '' },
-		{ label: 'Código interno', name: 'projectCode', type: 'text', value: '' },
-		{ label: 'Fecha de solicitud', name: 'requestDate', type: 'date', value: new Date().toISOString().split('T')[0] },
-		{ label: 'Cliente', name: 'client', type: 'text', value: '' },
-		{ label: 'Tipo', name: 'type', type: 'text', value: '' },
-		{ label: 'Presupuesto', name: 'budget', type: 'text', value: '' },
+		{ label: 'Nombre', name: 'name', type: 'text', value: '', validation: { required: true, maxLength: 50 } },
+		{ label: 'Código interno', name: 'projectCode', type: 'text', helper: 'Utiliza el formato PDI-XX-XXX', value: 'PDI-', validation: { required: true, regex: /^PDI-[A-Z\d]{2}-[A-Z\d]{3}$/ } },
+		{ label: 'Fecha de solicitud', name: 'requestDate', type: 'date', value: new Date().toISOString().split('T')[0], validation: { required: true } },
+		{ label: 'Cliente', name: 'client', type: 'text', value: '', validation: { required: true, maxLength: 50 } },
+		{ label: 'Tipo', name: 'type', type: 'select', value: ['Inspección', 'Diseño', 'Consultoría'], validation: { required: true } },
+		{ label: 'Metros cuadrados', name: 'squareMeters', type: 'money', value: '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+		{ label: 'Presupuesto', name: 'budget', type: 'money', value: '', helper: 'Ingresa la cantidad en dólares', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
 	];
 
 	const handleFormSubmit = async (fieldValues: {[key: string]: string}) => {
@@ -28,6 +31,7 @@ export default function New() {
 			requestDate: fieldValues.requestDate,
 			client: fieldValues.client,
 			type: fieldValues.type,
+			squareMeters: parseFloat(fieldValues.squareMeters),
 			budget: parseFloat(fieldValues.budget),
 		};
 
@@ -44,7 +48,7 @@ export default function New() {
 
 	const closeModalAndRedirect = () => {
         setShowModal(false);
-        window.location.href = '/project/index';
+		history.push('/project/index');
     };
 
 	return (
@@ -52,6 +56,7 @@ export default function New() {
 			<Form
 			title='Nuevo Proyecto'
 			button='Crear Proyecto'
+			back='/project/index'
 			fields={fields}
 			onSubmit={handleFormSubmit}/>
 

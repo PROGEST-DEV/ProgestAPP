@@ -3,7 +3,8 @@ interface PurchaseOrderItem {
   projectId: string;
   code: string;
   date: string;
-  amount: number;
+  amountUSD: number;
+  amountCOL: number;
 }
 
 export default PurchaseOrderItem;

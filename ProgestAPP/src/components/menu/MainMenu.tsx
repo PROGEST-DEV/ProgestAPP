@@ -12,6 +12,7 @@ import {
 	useDisclosure,
 	useColorModeValue
 } from '@chakra-ui/react';
+
 // Assets
 import {
 	MdOutlineMoreHoriz,
@@ -56,9 +57,9 @@ export default function Banner(props: { id?: any, name?: string, [x: string]: an
             });
     };
 
-	const closeOkModalAndRedirect = () => {
+	const closeOkModalAndReload = () => {
         setIsOkModalOpen(false);
-        window.location.href = '/project/index';
+        window.location.reload();
     };
 
 	return (
@@ -151,7 +152,7 @@ export default function Banner(props: { id?: any, name?: string, [x: string]: an
 					</>
 				}
 				isOpen={isOkModalOpen}
-				onClose={closeOkModalAndRedirect}
+				onClose={closeOkModalAndReload}
 			/>
 		</Menu>
 	);

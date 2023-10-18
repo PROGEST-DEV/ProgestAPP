@@ -2,7 +2,6 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 type ChartProps = {
-	// using `interface` is also ok
 	[x: string]: any;
 };
 type ChartState = {
@@ -17,6 +16,17 @@ class ColumnChart extends React.Component<ChartProps, ChartState> {
 			chartData: [],
 			chartOptions: {}
 		};
+	}
+	componentDidUpdate(prevProps: ChartProps) {
+		if (
+		  prevProps.chartData !== this.props.chartData ||
+		  prevProps.chartOptions !== this.props.chartOptions
+		) {
+		  this.setState({
+			chartData: this.props.chartData,
+			chartOptions: this.props.chartOptions
+		  });
+		}
 	}
 
 	componentDidMount() {

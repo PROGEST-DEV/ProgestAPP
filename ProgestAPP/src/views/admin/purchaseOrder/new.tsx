@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import Form from 'components/form/Form';
 import OkModal from 'components/modal/OkModal';
@@ -9,12 +9,14 @@ import PurchaseOrderItem from 'interfaces/PurchaseOrderItem';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
 	const fields = [
-		{ label: 'Código', name: 'code', type: 'text', value: '' },
-		{ label: 'Fecha', name: 'date', type: 'date', value: '' },
-		{ label: 'Monto', name: 'amount', type: 'number', value: 0 },
+		{ label: 'Código', name: 'code', type: 'text', value: '', validation: { required: true, maxLength: 10 } },
+		{ label: 'Fecha', name: 'date', type: 'date', value: new Date().toISOString().split('T')[0], validation: { required: true } },
+		{ label: 'Monto', name: 'amountUSD', type: 'money', value: '', helper: 'Ingresa la cantidad en dólares', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+		{ label: 'Monto', name: 'amountCOL', type: 'money', value: '', helper: 'Ingresa la cantidad en colones', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
 	];
 
 	const handleFormSubmit = async (fieldValues: {[key: string]: string}) => {
@@ -24,9 +26,9 @@ export default function New() {
 				projectId: id,
 				code: fieldValues.code,
 				date: fieldValues.date,
-				amount: parseFloat(fieldValues.amount),
+				amountUSD: parseFloat(fieldValues.amountUSD),
+				amountCOL: parseFloat(fieldValues.amountCOL),
 			};
-	
 			PurchaseOrderService.create(newPurchaseOrder)
 				.then((response) => {
 					console.log('Ok:', response);
@@ -37,11 +39,10 @@ export default function New() {
 				});
 		}
 	};
-	
 
 	const closeModalAndRedirect = () => {
         setShowModal(false);
-        window.location.href = '/project/index';
+        history.push(`/project/details/${id}`);
     };
 
 	return (
@@ -49,10 +50,11 @@ export default function New() {
 			<Form
 			title='Nueva Orden de Compra'
 			button='Crear Orden de Compra'
+			back={`/project/details/${id}`}
 			fields={fields}
 			onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Proyecto creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			{showModal && <OkModal message="Orden de compra creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
 		</>
 	);
 }

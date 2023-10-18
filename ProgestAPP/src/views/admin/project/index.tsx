@@ -21,7 +21,7 @@ export default function Index() {
 
 	useEffect(() => {
 		let promise;
-		if (search === null) {
+		if (search === null || search === ':search') {
 		  promise = ProjectService.getAll(['type'], activeType === 'Todos' ? null : activeType);
 		} else {
 		  promise = ProjectService.getAll(['client', 'name', 'projectcode'], search);
@@ -50,43 +50,59 @@ export default function Index() {
 
 	return (
 		<Box w='100%' pt={{ base: '180px', md: '80px', xl: '80px' }}>
-			<Flex
-				align='center'
-				me='20px'
-				mb='auto'
-				ms={{ base: '24px', md: '0px' }}
-				mt='auto'
-			>
-                {uniqueTypes.map(type => (
-                    <Link
-                        key={type}
-                        color={textColorBrand}
-                        fontWeight='500'
-                        me={{ base: '34px', md: '44px' }}
-						onClick={() => handleTypeClick(type)}
-						backgroundColor={activeType === type ? 'white' : 'transparent'}
-						borderRadius="20px"
-						padding="10px"
-                    >
-                        {type}
-                    </Link>
-                ))}
-				<IconButton
-					ml='auto'
-					mb='20px'
-					colorScheme="brand"
-					aria-label="Add project"
-					icon={<MdAdd />}
-					as={RLink}
-					padding="0px 8px"
-					borderRadius="100%"
-					to="/project/new"
-				/>
-			</Flex>
 			{projects.length === 0 ? (
-                <Empty />
+				<>
+					<IconButton
+						ml='auto'
+						mb='20px'
+						colorScheme="brand"
+						aria-label="Add project"
+						icon={<MdAdd />}
+						as={RLink}
+						padding="0px 8px"
+						borderRadius="100%"
+						to="/project/new"
+					/>
+					<Empty />
+				</>
             ) : (
 				<Flex flexDirection='column' w='100%'>
+					<Flex
+						flexWrap="wrap"
+						align='center'
+						mb='auto'
+					>
+						{uniqueTypes.map(type => (
+							
+							<Link
+								isTruncated
+								key={type}
+								color={textColorBrand}
+								fontWeight='500'
+								onClick={() => handleTypeClick(type)}
+								backgroundColor={activeType === type ? 'white' : 'transparent'}
+								borderRadius="20px"
+								p="10px"
+								m="5px"
+								maxWidth="150px"
+								flex="1"
+								textAlign="center"
+							>
+								{type}
+							</Link>
+						))}
+						<IconButton
+							ml='auto'
+							mb='20px'
+							colorScheme="brand"
+							aria-label="Add project"
+							icon={<MdAdd />}
+							as={RLink}
+							padding="0px 8px"
+							borderRadius="100%"
+							to="/project/new"
+						/>
+					</Flex>
 					<SimpleGrid columns={{ base: 1, md: 4 }} gap='20px'>
 						{projects.map(project => (
 							<ProjectCard

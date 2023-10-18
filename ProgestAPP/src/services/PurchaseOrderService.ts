@@ -2,15 +2,20 @@ import API from 'apiConfig';
 import PurchaseOrderItem from 'interfaces/PurchaseOrderItem';
 
 const PurchaseOrderService = {
-    getAll: () => new Promise<PurchaseOrderItem[]>(
+    getAll: (searchFields?: string[], searchTerm?: string) => new Promise<PurchaseOrderItem[]>(
         (resolve, reject)=>{
-            API.get('PurchaseOrders')
-            .then(
-                res => resolve(res.data)
-            )
-            .catch(
-                err => reject(err)
-            )
+            const searchParams = new URLSearchParams();
+            if (searchFields && searchTerm) {
+                searchFields.forEach(field => {
+                    searchParams.append('searchFields', field);
+                });
+                searchParams.append('searchTerm', searchTerm);
+            }    
+            const url = `PurchaseOrders?${searchParams.toString()}`;
+    
+            API.get(url)
+                .then(res => resolve(res.data))
+                .catch(err => reject(err));
         }
     ),
     get: (key: string) => new Promise<PurchaseOrderItem>(
