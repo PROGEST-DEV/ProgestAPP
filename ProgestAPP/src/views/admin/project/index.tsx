@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Flex, Link, useColorModeValue, SimpleGrid, IconButton} from '@chakra-ui/react';
 import { Link as RLink, useParams, useHistory } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
@@ -9,13 +9,12 @@ import ProjectItem from 'interfaces/ProjectItem';
 
 
 export default function Index() {
-	var { search = null } = useParams<{ search: string }>();
+	let { search = null } = useParams<{ search: string }>();
 
-	
 	const history = useHistory();
 	const textColorBrand = useColorModeValue('brand.500', 'white');
 
-	const [projects, setProjects] = useState([]);
+	const [projects, setProjects] = useState<ProjectItem[]>([]);
 	const [uniqueTypes, setUniqueTypes] = useState([]);
 	const [activeType, setActiveType] = useState('Todos');
 
@@ -41,12 +40,12 @@ export default function Index() {
 		  });
 	}, [search, activeType]);
 
-	const handleTypeClick = (type: string) => {
+	const handleTypeClick = useCallback((type: string) => {
 		if (type === 'Todos') {
 			history.replace('/project/index');
 		} 
 		setActiveType(type);
-	};
+	}, [history]);
 
 	return (
 		<Box w='100%' pt={{ base: '180px', md: '80px', xl: '80px' }}>
