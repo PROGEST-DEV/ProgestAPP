@@ -32,7 +32,7 @@ export default function New() {
 			const newPayRoll: PayRollItem = {
 				id: uuidv4(),
 				projectId: id,
-				date: fieldValues.date,
+				date: `${fieldValues.date}T00:00:00Z`,
 				amountUSD: parseFloat(fieldValues.amountUSD),
 				amountCOL: parseFloat(fieldValues.amountCOL),
 				name: fieldValues.name,

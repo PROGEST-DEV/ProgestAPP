@@ -55,7 +55,7 @@ export default function Edit() {
 			status: 'new',
 			name: fieldValues.name,
 			projectCode: fieldValues.projectCode,
-			requestDate: fieldValues.requestDate,
+			requestDate: `${fieldValues.requestDate}T00:00:00Z`,
 			client: fieldValues.client,
 			type: fieldValues.type,
 			squareMeters: parseFloat(fieldValues.squareMeters),

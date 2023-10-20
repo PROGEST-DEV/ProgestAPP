@@ -25,7 +25,7 @@ export default function New() {
 			const newMaterialRequest: MaterialRequestItem = {
 				id: uuidv4(),
 				projectId: id,
-				date: fieldValues.date,
+				date: `${fieldValues.date}T00:00:00Z`,
 				amountUSD: parseFloat(fieldValues.amountUSD),
 				amountCOL: parseFloat(fieldValues.amountCOL),
 				consecutive: fieldValues.consecutive,

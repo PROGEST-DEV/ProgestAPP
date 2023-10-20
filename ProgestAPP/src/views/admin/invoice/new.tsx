@@ -31,7 +31,7 @@ export default function New() {
 				id: uuidv4(),
 				purchaseOrderId: id,
 				code: fieldValues.code,
-				date: fieldValues.date,
+				date: `${fieldValues.date}T00:00:00Z`,
 				amountUSD: parseFloat(fieldValues.amountUSD),
 				amountCOL: parseFloat(fieldValues.amountCOL),
 				vatUSD: parseFloat(fieldValues.vatUSD),
