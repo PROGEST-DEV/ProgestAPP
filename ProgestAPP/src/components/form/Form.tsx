@@ -61,7 +61,7 @@ const Form = (props:{
       }
 
       if (fieldName.includes('USD') || fieldName.includes('COL')){
-        let convert = await convertValue(fieldName, value, fieldValues['date']);
+        let convert = await convertValue(fieldName, value, fieldValues['date'] || fieldValues['requestDate']);
         fieldValues[convert.newName] = convert.newValue.toString();
       }
 

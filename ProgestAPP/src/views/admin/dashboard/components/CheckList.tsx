@@ -5,6 +5,7 @@ import { Box, Flex, Text, Circle, useColorModeValue, Checkbox, IconButton } from
 // Custom components
 import Card from 'components/card/Card';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import Empty from 'components/exceptions/Empty';
 
 export default function CheckList(props: {
     title: string, 
@@ -107,45 +108,52 @@ export default function CheckList(props: {
 					{title}
 				</Text>
 			</Flex>
-			<Box px='11px' w='100%'>
-            {checkboxes.slice(startIndex, endIndex).map((item: any, index: number) => (
-                <Flex key={index} w='100%' mb='20px'>
-                    <Checkbox
-                        me='16px'
-                        isChecked={item.checked}
-                        colorScheme='brandScheme'
-                        onChange={() => handleCheckboxChange(index)}
-                    />
-                    <Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
-                        {item.label}
-                    </Text>
-                </Flex>
-            ))}
-			</Box>
-            <Flex justifyContent="space-between" alignItems="flex-end" w="100%" mt="auto">
-                <IconButton
-                    aria-label="Move to Left"
-                    isDisabled={currentPage === 1}
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    borderRadius="10px"
-                    minWidth="34px"
-                    height="34px"
-                    icon={<MdKeyboardArrowLeft/>}
-                    colorScheme="brand"
-                    fontSize="24px"
-                />
-                <IconButton
-                    aria-label="Move to Right"
-                    isDisabled={currentPage >= totalPages}
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    borderRadius="10px"
-                    minWidth="34px"
-                    height="34px"
-                    icon={<MdKeyboardArrowRight/>}
-                    colorScheme="brand"
-                    fontSize="24px"
-                />
-            </Flex>
+            {checkboxes?.length !== 0 ? (
+                <>
+                    <Box px='11px' w='100%'>
+                    {checkboxes.slice(startIndex, endIndex).map((item: any, index: number) => (
+                        <Flex key={index} w='100%' mb='20px'>
+                            <Checkbox
+                                me='16px'
+                                isChecked={item.checked}
+                                colorScheme='brandScheme'
+                                onChange={() => handleCheckboxChange(index)}
+                            />
+                            <Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
+                                {item.label}
+                            </Text>
+                        </Flex>
+                    ))}
+                    </Box>
+                    <Flex justifyContent="space-between" alignItems="flex-end" w="100%" mt="auto">
+                        <IconButton
+                            aria-label="Move to Left"
+                            isDisabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            borderRadius="10px"
+                            minWidth="34px"
+                            height="34px"
+                            icon={<MdKeyboardArrowLeft/>}
+                            colorScheme="brand"
+                            fontSize="24px"
+                        />
+                        <IconButton
+                            aria-label="Move to Right"
+                            isDisabled={currentPage >= totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            borderRadius="10px"
+                            minWidth="34px"
+                            height="34px"
+                            icon={<MdKeyboardArrowRight/>}
+                            colorScheme="brand"
+                            fontSize="24px"
+                        />
+                    </Flex>
+                </>
+            ) : (
+                <Empty />
+            )
+            }
 		</Card>
 	);
 }

@@ -129,7 +129,7 @@ const routes = [
 		path: "/index",
 		icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
 		component: Dashboard,
-	},
+	},/*
 	{
 		name: 'Salir',
 		layout: '/auth',
@@ -143,7 +143,7 @@ const routes = [
 		path: '/sign-up',
 		icon: null,
 		component: SignUpCentered
-	},
+	},*/
 ];
 
 export default routes;

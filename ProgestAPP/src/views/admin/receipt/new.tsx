@@ -7,9 +7,11 @@ import Form from 'components/form/Form';
 import ReceiptService from 'services/ReceiptService';
 import ReceiptItem from 'interfaces/ReceiptItem';
 import Cookies from 'js-cookie';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 	const projectId = Cookies.get('projectid') || '';
@@ -41,6 +43,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -51,15 +56,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nuevo Recibo'
-			button='Crear Recibo'
-			back={`/project/details/${projectId}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nuevo Recibo'
+				button='Crear Recibo'
+				back={`/project/details/${projectId}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Recibo creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Recibo creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

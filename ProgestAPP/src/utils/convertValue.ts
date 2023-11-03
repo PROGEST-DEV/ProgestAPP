@@ -3,12 +3,14 @@ import { formatValue } from 'utils/formatValue';
 
 export const convertValue = async (name: string, value: string, date: string) => {
   try {
+    console.log(name,value)
     date = date.replaceAll('-', '/')
     const exchangeRate = await ExchangeRateService.get(date, date);
     const exchangeValue = parseFloat(exchangeRate[0].value);
     let newName = name;
+    console.log("2:", name,value)
     let newValue = parseFloat(value.replaceAll(',',''));
-
+    
     if (name.includes('USD')) {
       newName = name.replace('USD', 'COL');
       newValue *= exchangeValue;

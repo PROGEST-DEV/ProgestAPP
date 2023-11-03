@@ -6,9 +6,11 @@ import Form from 'components/form/Form';
 import OkModal from 'components/modal/OkModal';
 import PurchaseOrderService from 'services/PurchaseOrderService';
 import PurchaseOrderItem from 'interfaces/PurchaseOrderItem';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
@@ -36,6 +38,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -46,15 +51,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nueva Orden de Compra'
-			button='Crear Orden de Compra'
-			back={`/project/details/${id}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nueva Orden de Compra'
+				button='Crear Orden de Compra'
+				back={`/project/details/${id}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Orden de compra creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Orden de compra creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

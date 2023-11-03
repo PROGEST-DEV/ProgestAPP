@@ -9,11 +9,14 @@ import OkModal from 'components/modal/OkModal';
 import ProjectService from 'services/ProjectService';
 import ProjectItem from 'interfaces/ProjectItem';
 import FormField from 'interfaces/FormField';
+import Error from 'components/exceptions/Error';
+
 
 export default function Edit() {
 	const { id } = useParams<{ id: string }>();
 	const [showModal, setShowModal] = useState(false);
 	const [fields, setFields] = useState<FormField[]>([]);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -39,12 +42,14 @@ export default function Edit() {
 					{ label: 'Cliente', name: 'client', type: 'text', value: project.client || '', validation: { required: true, maxLength: 50 } },
 					{ label: 'Tipo', name: 'type', type: 'select', value: typeList , validation: { required: true } },
 					{ label: 'Metros cuadrados', name: 'squareMeters', type: 'money', value: formatValue(project.squareMeters.toString()) || '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
-					{ label: 'Presupuesto', name: 'budget', type: 'money', value: formatValue(project.budget.toString()) || '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+					{ label: 'Presupuesto', name: 'budgetUSD', type: 'money', helper: 'Cantidad en dólares', value: formatValue(project.budgetUSD.toString()) || '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+            		{ label: 'Presupuesto', name: 'budgetCOL', type: 'money', helper: 'Cantidad en colones', value: formatValue(project.budgetCOL.toString()) || '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
 				];
 				setFields(newFields);
 			})
 			.catch((error) => {
 				console.error('Error fetching project data:', error);
+				setIsError(true);
 			});
 		}
 		}, [id]);
@@ -59,7 +64,8 @@ export default function Edit() {
 			client: fieldValues.client,
 			type: fieldValues.type,
 			squareMeters: parseFloat(fieldValues.squareMeters),
-			budget: parseFloat(fieldValues.budget),
+			budgetUSD: parseFloat(fieldValues.budgetUSD),
+			budgetCOL: parseFloat(fieldValues.budgetCOL),
 		};
 
 		ProjectService.edit(id, editedProject)
@@ -69,6 +75,7 @@ export default function Edit() {
 			})
 			.catch((error) => {
 				console.error('Error:', error);
+				setIsError(true);
 			});
 	};
 	
@@ -79,8 +86,9 @@ export default function Edit() {
     };
 
 	return (
-		
-		fields.length > 0 && (
+		isError ? (
+        	<Error />
+      	) : fields.length > 0 && (
 			<>
 				<Form
 				title='Actualización de Proyecto'

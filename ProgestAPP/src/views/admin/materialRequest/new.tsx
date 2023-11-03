@@ -6,9 +6,11 @@ import OkModal from 'components/modal/OkModal';
 import Form from 'components/form/Form';
 import MaterialRequestService from 'services/MaterialRequestService';
 import MaterialRequestItem from 'interfaces/MaterialRequestItem';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
@@ -39,6 +41,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -49,15 +54,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nueva Solicitud de Material'
-			button='Crear Solicitud de Material'
-			back={`/expense/index/${id}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nueva Solicitud de Material'
+				button='Crear Solicitud de Material'
+				back={`/expense/index/${id}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Solicitud de Material creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Solicitud de Material creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

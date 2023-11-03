@@ -7,9 +7,11 @@ import Form from 'components/form/Form';
 import InvoiceService from 'services/InvoiceService';
 import InvoiceItem from 'interfaces/InvoiceItem';
 import Cookies from 'js-cookie';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 	const projectId = Cookies.get('projectid') || '';
@@ -45,6 +47,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -55,15 +60,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nueva Factura'
-			button='Crear Factura'
-			back={`/project/details/${projectId}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nueva Factura'
+				button='Crear Factura'
+				back={`/project/details/${projectId}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Factura creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Factura creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

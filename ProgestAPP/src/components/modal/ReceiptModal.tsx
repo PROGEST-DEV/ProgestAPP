@@ -4,11 +4,14 @@ import ComplexTable from 'components/table/ComplexTable';
 import AddButton from 'components/button/AddButton';
 import ReceiptService from 'services/ReceiptService';
 import ReceiptItem from 'interfaces/ReceiptItem';
+import Error from 'components/exceptions/Error';
 
 function ReceiptModal(props:{title: string, id: string, isOpen: boolean, onClose: () => void}) {
     const { title, id, isOpen, onClose } = props;
     const [receipts, setReceipts] = useState<ReceiptItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const spinnerColor = useColorModeValue('brand.700', 'white');
 
@@ -25,6 +28,7 @@ function ReceiptModal(props:{title: string, id: string, isOpen: boolean, onClose
                 })
                 .catch(error => {
                     console.error('Error fetching invoices:', error);
+                    setIsError(true);
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -38,7 +42,9 @@ function ReceiptModal(props:{title: string, id: string, isOpen: boolean, onClose
                 <ModalOverlay />
                 <ModalContent borderRadius="20px"  w='auto'>
                     <ModalBody>
-                        {isLoading ? (
+                        {isError ? (
+                            <Error />
+                        ) : isLoading ? (
                             <Center>
                                 <Spinner size="xl" variant='darkBrand' color={spinnerColor} />
                             </Center>

@@ -5,6 +5,6 @@ interface FormField {
     value: any;
     helper?: any;
     validation?: any
-    disabled?: boolean;
+    isDisabled?: boolean;
   }
   export default FormField;

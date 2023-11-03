@@ -7,9 +7,12 @@ import OkModal from 'components/modal/OkModal';
 import ProjectService from 'services/ProjectService';
 import ProjectItem from 'interfaces/ProjectItem';
 import FormField from 'interfaces/FormField';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
+
 	const history = useHistory();
 
 	const fields: FormField[] = [
@@ -19,7 +22,8 @@ export default function New() {
 		{ label: 'Cliente', name: 'client', type: 'text', value: '', validation: { required: true, maxLength: 50 } },
 		{ label: 'Tipo', name: 'type', type: 'select', value: ['Inspección', 'Diseño', 'Consultoría'], validation: { required: true } },
 		{ label: 'Metros cuadrados', name: 'squareMeters', type: 'money', value: '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
-		{ label: 'Presupuesto', name: 'budget', type: 'money', value: '', helper: 'Ingresa la cantidad en dólares', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+		{ label: 'Presupuesto', name: 'budgetUSD', type: 'money', helper: 'Ingresa la cantidad en dólares', value: '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
+		{ label: 'Presupuesto', name: 'budgetCOL', type: 'money', helper: 'Ingresa la cantidad en colones', value: '', validation: { required: true, maxLength: 21, regex: /^\d{1,3}(,\d{3})*(\.\d{1,2})?$/ } },
 	];
 
 	const handleFormSubmit = async (fieldValues: {[key: string]: string}) => {
@@ -32,7 +36,8 @@ export default function New() {
 			client: fieldValues.client,
 			type: fieldValues.type,
 			squareMeters: parseFloat(fieldValues.squareMeters),
-			budget: parseFloat(fieldValues.budget),
+			budgetUSD: parseFloat(fieldValues.budgetUSD),
+			budgetCOL: parseFloat(fieldValues.budgetCOL),
 		};
 
 		ProjectService.create(newProject)
@@ -42,6 +47,9 @@ export default function New() {
 			})
 			.catch((error) => {
 				console.error('Error:', error);
+				if (error?.response?.status !== 400) {
+					setIsError(true);
+				}
 			});
 	};
 	
@@ -52,15 +60,20 @@ export default function New() {
     };
 
 	return (
+		isError ? (
+			<Error />
+		) : (
 		<>
 			<Form
-			title='Nuevo Proyecto'
-			button='Crear Proyecto'
-			back='/project/index'
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+				title='Nuevo Proyecto'
+				button='Crear Proyecto'
+				back='/project/index'
+				fields={fields}
+				onSubmit={handleFormSubmit}
+			/>
 
 			{showModal && <OkModal message="Proyecto creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
 		</>
+		)
 	);
 }

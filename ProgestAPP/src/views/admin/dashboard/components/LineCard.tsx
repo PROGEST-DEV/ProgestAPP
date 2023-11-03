@@ -18,11 +18,8 @@ export default function LineCard(props: { title: string, subtitle: string, entit
 	const [dataList, setDataList] = useState([]);
 
 	useEffect(() => {
-		console.log(values);
-
-
 		let list: { name: string; data: any }[] = [];
-		const maxLength = Math.max(...values.map(sublist => sublist.length));
+		const maxLength = values ? Math.max(...values.map(sublist => sublist ? sublist.length : 0)) : 0;
 
 		entities.forEach(e => {
 			let data: number[] = [];
@@ -31,9 +28,17 @@ export default function LineCard(props: { title: string, subtitle: string, entit
 				data = Array(maxLength).fill(budget);
 				list.push({ name: e, data: data });
 			} else if (e === 'Ingresos') {
-				list.push({ name: e, data: values[0] })
+				data = values[0];
+				while (data.length < maxLength) {
+				  data.push(0);
+				}
+				list.push({ name: e, data: data })
 			} else if (e === 'Gastos') {
-				list.push({ name: e, data: values[1] })
+				data = values[1];
+				while (data.length < maxLength) {
+				  data.push(0);
+				}
+				list.push({ name: e, data: data })
 			} else {
 			  	list.push({ name: e, data: values });
 			}

@@ -6,9 +6,11 @@ import OkModal from 'components/modal/OkModal';
 import Form from 'components/form/Form';
 import ServiceService from 'services/ServiceService';
 import ServiceItem from 'interfaces/ServiceItem';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
@@ -39,6 +41,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -49,15 +54,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nuevo Servicio'
-			button='Crear Servicio'
-			back={`/expense/index/${id}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nuevo Servicio'
+				button='Crear Servicio'
+				back={`/expense/index/${id}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Servicio creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Servicio creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

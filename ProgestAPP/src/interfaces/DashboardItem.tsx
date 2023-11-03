@@ -17,7 +17,8 @@ interface DashboardViewItem {
     requestDate: string;
     type: string;
     squareMeters: number;
-    budget: number;
+    budgetUSD: number;
+    budgetCOL: number;
     expenseId: string;
     expenseDate: string;
     discriminator: string;

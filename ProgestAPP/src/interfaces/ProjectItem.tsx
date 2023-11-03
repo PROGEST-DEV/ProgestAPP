@@ -7,7 +7,8 @@ interface ProjectItem {
     type: string;
     status: string;
     squareMeters: number;
-    budget: number;
+    budgetUSD: number;
+    budgetCOL: number;
 }
  
 export default ProjectItem;

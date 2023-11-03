@@ -23,7 +23,6 @@ const FieldInput = (props: {
 
     const textColor = useColorModeValue('navy.700', 'white');
     const brandStars = useColorModeValue('brand.500', 'brand.400');
-
     return (
         <FormControl key={field.name} isDisabled={isDisabled} isInvalid={fieldErrors[field.name].isError}>    
             <FormLabel
@@ -58,7 +57,7 @@ const FieldInput = (props: {
             ) : (
               <Input
                 isRequired={true}
-                disabled={field.disabled || false}
+                isDisabled={field.isDisabled || false}
                 variant="auth"
                 fontSize="sm"
                 ms={{ base: '0px', md: '0px' }}

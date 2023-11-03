@@ -6,9 +6,11 @@ import OkModal from 'components/modal/OkModal';
 import Form from 'components/form/Form';
 import ReimbursementService from 'services/ReimbursementService';
 import ReimbursementItem from 'interfaces/ReimbursementItem';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
@@ -37,6 +39,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -47,16 +52,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nuevo Reembolso'
-			button='Crear Reembolso'
-			back={`/expense/index/${id}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nuevo Reembolso'
+				button='Crear Reembolso'
+				back={`/expense/index/${id}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Reembolso creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
-
+				{showModal && <OkModal message="Reembolso creado correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

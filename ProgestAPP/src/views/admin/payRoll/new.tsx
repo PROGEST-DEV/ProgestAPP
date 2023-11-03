@@ -6,9 +6,11 @@ import OkModal from 'components/modal/OkModal';
 import Form from 'components/form/Form';
 import PayRollService from 'services/PayRollService';
 import PayRollItem from 'interfaces/PayRollItem';
+import Error from 'components/exceptions/Error';
 
 export default function New() {
 	const [showModal, setShowModal] = useState(false);
+	const [isError, setIsError] = useState(false);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
@@ -50,6 +52,9 @@ export default function New() {
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					if (error?.response?.status !== 400) {
+						setIsError(true);
+					}
 				});
 		}
 	};
@@ -60,15 +65,19 @@ export default function New() {
     };
 
 	return (
-		<>
-			<Form
-			title='Nueva Planilla'
-			button='Crear Planilla'
-			back={`/expense/index/${id}`}
-			fields={fields}
-			onSubmit={handleFormSubmit}/>
+		isError ? (
+        	<Error />
+      	) : (
+			<>
+				<Form
+				title='Nueva Planilla'
+				button='Crear Planilla'
+				back={`/expense/index/${id}`}
+				fields={fields}
+				onSubmit={handleFormSubmit}/>
 
-			{showModal && <OkModal message="Planilla creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
-		</>
+				{showModal && <OkModal message="Planilla creada correctamente." isOpen={showModal} onClose={closeModalAndRedirect} />}
+			</>
+		)
 	);
 }

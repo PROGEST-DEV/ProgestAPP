@@ -7,6 +7,7 @@ import BarChart from 'components/charts/BarChart';
 
 // Custom components
 import Card from 'components/card/Card';
+import Empty from 'components/exceptions/Empty';
 import { barChartData, barChartOptions } from 'variables/charts';
 
 export default function BarChartCard(props: { title: string, entity: string, labels: string[], values: number[], [x: string]: any }) {
@@ -16,10 +17,10 @@ export default function BarChartCard(props: { title: string, entity: string, lab
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
 	const spinnerColor = useColorModeValue('brand.700', 'white');
 
-	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(true);
 
 	useEffect(() => {
-		setIsLoading(labels.length === 0);
+		setIsError(labels.length === 0);
 	}, [labels]);
 			
 	return (
@@ -42,11 +43,15 @@ export default function BarChartCard(props: { title: string, entity: string, lab
 				</Flex>
 			</Flex>
 			<Box h='240px' w='100%' mt='auto'>
-			{isLoading ? (
-				<Center>
-					<Spinner size="xl" variant='darkBrand' color={spinnerColor} />
-				</Center>
-				) : (
+			{isError ? (
+				<Text
+					color="#A3AED0"
+					fontSize="24px"
+					fontWeight="500"									
+            	>
+                	¡Sin datos disponibles!
+            	</Text> 
+			) : (
 				<BarChart chartData={barChartData(title, values)} chartOptions={barChartOptions(labels)} />
 			)}
 			</Box>
