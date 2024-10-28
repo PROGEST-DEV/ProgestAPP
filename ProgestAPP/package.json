@@ -1,12 +1,8 @@
 {
-  "homepage": "https://horizon-ui.com/horizon-ui-chakra-ts",
+  "homepage": ".",
   "name": "progest-typescript",
   "version": "1.1.0",
   "private": true,
-  "engines": {
-    "node": "18.x",
-    "npm": "6.x"
-  },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
     "@chakra-ui/react": "1.8.8",
@@ -74,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/cors": "^2.8.13",
     "@types/jest": "^29.5.6",
     "@types/react-calendar": "^3.5.2",

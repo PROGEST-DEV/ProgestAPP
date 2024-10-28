@@ -10,10 +10,10 @@ import crc from 'assets/img/dashboards/crc.png';
 // Utils
 import { formatValue } from 'utils/formatValue';
 import { monthOrder } from 'utils/monthOrder';
-import { convertValue } from 'utils/convertValue';
+// import { convertValue } from 'utils/convertValue';
 
 // Custom components
-import MiniCalendar from 'components/calendar/MiniCalendar';
+// import MiniCalendar from 'components/calendar/MiniCalendar';
 import MiniStatistics from 'components/card/MiniStatistics';
 import IconBox from 'components/icons/IconBox';
 import Error from 'components/exceptions/Error';
@@ -48,8 +48,8 @@ export default function Index() {
 	const [invoiceList, setInvoiceList] = useState([]);
 	const [expenseList, setExpenseList] = useState([]);
 
-	const [totalInvoiceList, setTotalInvoiceList] = useState([]);
-	const [totalExpenseList, setTotalExpenseList] = useState([]);
+	// const [totalInvoiceList, setTotalInvoiceList] = useState([]);
+	// const [totalExpenseList, setTotalExpenseList] = useState([]);
 
 	const [typesList, setTypesList] = useState([]);
 	const [isError, setIsError] = useState(false);

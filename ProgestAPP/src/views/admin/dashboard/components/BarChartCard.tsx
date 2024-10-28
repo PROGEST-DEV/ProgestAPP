@@ -2,20 +2,21 @@
 import React, { useState, useEffect } from 'react';
 
 // Chakra imports
-import { Box, Flex, Text, useColorModeValue, Spinner, Center } from '@chakra-ui/react';
+import { Box, Flex, Text, useColorModeValue, /*Spinner, Center*/ } from '@chakra-ui/react';
 import BarChart from 'components/charts/BarChart';
 
 // Custom components
 import Card from 'components/card/Card';
-import Empty from 'components/exceptions/Empty';
 import { barChartData, barChartOptions } from 'variables/charts';
+
+// import Empty from 'components/exceptions/Empty';
 
 export default function BarChartCard(props: { title: string, entity: string, labels: string[], values: number[], [x: string]: any }) {
 	const { title, entity, labels, values, ...rest } = props;
 
 	// Chakra Color Mode
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
-	const spinnerColor = useColorModeValue('brand.700', 'white');
+	// const spinnerColor = useColorModeValue('brand.700', 'white');
 
 	const [isError, setIsError] = useState(true);
 

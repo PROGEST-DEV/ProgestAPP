@@ -1,5 +1,5 @@
 import { Icon } from '@chakra-ui/react';
-import { MdHome, MdBarChart, MdLock } from 'react-icons/md';
+import { MdHome, MdBarChart, /*MdLock*/ } from 'react-icons/md';
 
 // Projects Imports
 import Projects from 'views/admin/project';
@@ -28,8 +28,8 @@ import NewService from 'views/admin/service/new';
 import Dashboard from "views/admin/dashboard";
 
 // Auth Imports
-import SignInCentered from 'views/auth/signIn';
-import SignUpCentered from 'views/auth/signUp';
+// import SignInCentered from 'views/auth/signIn';
+// import SignUpCentered from 'views/auth/signUp';
 
 const routes = [
 	{
