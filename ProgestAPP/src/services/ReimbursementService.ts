@@ -1,67 +1,57 @@
-import API from 'apiConfig';
+import { fetchAllData, fetchDataById, addData, updateData, deleteData } from 'apiConfig'; // Funciones auxiliares para Firestore
 import ReimbursementItem from 'interfaces/ReimbursementItem';
 
 const ReimbursementService = {
     getAll: (searchFields?: string[], searchTerm?: string) => new Promise<ReimbursementItem[]>(
-        (resolve, reject)=>{
-            const searchParams = new URLSearchParams();
-            if (searchFields && searchTerm) {
-                searchFields.forEach(field => {
-                    searchParams.append('searchFields', field);
-                });
-                searchParams.append('searchTerm', searchTerm);
-            }    
-            const url = `Reimbursements?${searchParams.toString()}`;
-    
-            API.get(url)
-                .then(res => resolve(res.data))
-                .catch(err => reject(err));
+        async (resolve, reject) => {
+            try {
+                const data = await fetchAllData('Reimbursements', { searchFields, searchTerm });
+                resolve(data as ReimbursementItem[]);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     get: (key: string) => new Promise<ReimbursementItem>(
-        (resolve, reject) => {
-          API.get(`Reimbursements/${key}`)
-            .then(
-              res => resolve(res.data)
-            )
-            .catch(
-              err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await fetchDataById('Reimbursements', key );
+                resolve(data as ReimbursementItem);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     create: (newReimbursement: ReimbursementItem) => new Promise<any>(
-        (resolve, reject) => {
-            API.post('Reimbursements', newReimbursement)
-            .then(
-                res => resolve(res.data)
-            )
-            .catch(
-                err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await addData('Reimbursements', newReimbursement);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     edit: (key: string, editedReimbursement: ReimbursementItem) => new Promise<any>(
-        (resolve, reject) => {
-            API.put(`Reimbursements/${key}`, editedReimbursement)
-            .then(
-                res => resolve(res.data)
-            )
-            .catch(
-                err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await updateData('Reimbursements', key, editedReimbursement);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     delete: (key: string) => new Promise<void>(
-        (resolve, reject) => {
-            API.delete(`Reimbursements/${key}`)
-                .then(
-                    () => resolve()
-                )
-                .catch(
-                    err => reject(err)
-                );
+        async (resolve, reject) => {
+            try {
+                await deleteData('Reimbursements', key);
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
         }
     )
-}
+};
 
 export default ReimbursementService;

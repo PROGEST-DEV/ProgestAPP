@@ -1,67 +1,57 @@
-import API from 'apiConfig';
+import { fetchAllData, fetchDataById, addData, updateData, deleteData } from 'apiConfig'; // Funciones auxiliares para Firestore
 import ServiceItem from 'interfaces/ServiceItem';
 
 const ServiceService = {
     getAll: (searchFields?: string[], searchTerm?: string) => new Promise<ServiceItem[]>(
-        (resolve, reject)=>{
-            const searchParams = new URLSearchParams();
-            if (searchFields && searchTerm) {
-                searchFields.forEach(field => {
-                    searchParams.append('searchFields', field);
-                });
-                searchParams.append('searchTerm', searchTerm);
-            }    
-            const url = `Services?${searchParams.toString()}`;
-    
-            API.get(url)
-                .then(res => resolve(res.data))
-                .catch(err => reject(err));
+        async (resolve, reject) => {
+            try {
+                const data = await fetchAllData('Services', { searchFields, searchTerm });
+                resolve(data as ServiceItem[]);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     get: (key: string) => new Promise<ServiceItem>(
-        (resolve, reject) => {
-          API.get(`Services/${key}`)
-            .then(
-              res => resolve(res.data)
-            )
-            .catch(
-              err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await fetchDataById('Services', key );
+                resolve(data as ServiceItem);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     create: (newService: ServiceItem) => new Promise<any>(
-        (resolve, reject) => {
-            API.post('Services', newService)
-            .then(
-                res => resolve(res.data)
-            )
-            .catch(
-                err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await addData('Services', newService);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     edit: (key: string, editedService: ServiceItem) => new Promise<any>(
-        (resolve, reject) => {
-            API.put(`Services/${key}`, editedService)
-            .then(
-                res => resolve(res.data)
-            )
-            .catch(
-                err => reject(err)
-            );
+        async (resolve, reject) => {
+            try {
+                const data = await updateData('Services', key, editedService);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
         }
     ),
     delete: (key: string) => new Promise<void>(
-        (resolve, reject) => {
-            API.delete(`Services/${key}`)
-                .then(
-                    () => resolve()
-                )
-                .catch(
-                    err => reject(err)
-                );
+        async (resolve, reject) => {
+            try {
+                await deleteData('Services', key);
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
         }
     )
-}
+};
 
 export default ServiceService;
